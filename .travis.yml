@@ -1,0 +1,20 @@
+sudo: required
+services:
+  - docker
+
+# before_install:
+
+script:
+  - docker build -t rajatkaushik/multi-client ./client
+  - docker build -t rajatkaushik/multi-server ./server
+  - docker build -t rajatkaushik/multi-worker ./worker
+  - docker build -t rajatkaushik/multi-nginx ./nginx
+
+after_success:
+  #Login
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take the image and push it to docker hub
+  - docker push rajatkaushik/multi-client
+  - docker push rajatkaushik/multi-nginx
+  - docker push rajatkaushik/multi-server
+  - docker push rajatkaushik/multi-worker
